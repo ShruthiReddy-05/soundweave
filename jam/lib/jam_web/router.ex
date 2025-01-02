@@ -24,7 +24,7 @@ defmodule JamWeb.Router do
   # scope "/api", JamWeb do
   #   pipe_through :api
   # end
-
+  
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:jam, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put

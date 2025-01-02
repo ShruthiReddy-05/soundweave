@@ -2,10 +2,13 @@ import Config
 
 # Configure your database
 config :jam, Jam.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "gdivya21",
+  password: "webootcamp",
   hostname: "localhost",
-  database: "jam_dev",
+  # username: System.get_env("POSTGRES_USER") || "your_username",
+  # password: System.get_env("POSTGRES_PASSWORD") || "your_password",
+  # database: System.get_env("POSTGRES_DB") || "your_app_name_dev",
+  database: "soundweave_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

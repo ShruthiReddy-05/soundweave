@@ -1,4 +1,4 @@
-defmodule RealTimeJamming.SessionManager do
+defmodule Jam.SessionManager do
   @moduledoc """
   Module for managing real-time jamming sessions using ETS.
   """
