@@ -86,20 +86,14 @@
     <div class="container" id="start-page">
         <h1>Start a Room</h1>
         <p>Click on the button below to start a room.</p>
-        
-
-
         <button class="button" onclick="startRoom()">
             <img src="/images/start-guitar.jpg" alt="Start Room">
             Start Room
         </button>
-
-
-
-
-
-
+        <!-- New element to display the room code -->
+        <p id="room-code-display" style="margin-top: 10px; font-weight: bold; color: #007BFF;"></p>
     </div>
+
 
     <div class="container" id="join-page">
         <h1>Join a Room</h1>
@@ -133,15 +127,15 @@
 
         function startRoom() {
             fetch('/create_room')
-                .then(response => response.json())
-                .then(data => {
-                    const roomCode = data.room_code;
-                    alert(`Room created! Share this code: ${roomCode}`);
-                    // Redirect to the room page if necessary
-                    window.location.href = `/room/${roomCode}`;
-                })
-                .catch(error => console.error('Error creating room:', error));
+            .then(response => response.json())
+            .then(data => {
+                const roomCode = data.room_code;
+                const roomCodeDisplay = document.getElementById('room-code-display');
+                roomCodeDisplay.textContent = `Room created! Share this code: ${roomCode}`;
+            })
+            .catch(error => console.error('Error creating room:', error));
         }
+
 
 
 
