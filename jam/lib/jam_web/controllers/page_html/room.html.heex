@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,16 +10,41 @@
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
             color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 5px solid black;
+        }
+
+        .main-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .left-container {
+            width: 50%; /* Take up half the width */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .container {
-            width: 90%;
-            max-width: 900px; /* Increased the max-width */
+            width: 100%;
+            max-width: 600px;
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -29,83 +54,192 @@
 
         .video-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            background-color: #000;
+            border-radius: 8px;
             width: 100%;
-            margin-top: 20px;
+            height: 300px; /* Adjusted for a balanced layout */
+            overflow: hidden;
+            margin-bottom: 20px;
         }
 
-        .video {
-            flex: 1;
-            max-width: 48%;
-            background-color: #000;
-            height: 400px; /* Increased height */
-            border-radius: 8px;
-            overflow: hidden;
+        #local-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        .button-container {
             display: flex;
             justify-content: center;
-            align-items: center;
-            color: white;
+            gap: 20px;
+            margin-top: 10px;
         }
 
-        .video.others {
-            background-color: #222;
+        .toggle-button {
+            font-size: 30px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .toggle-button.off {
+            background-color: #f44336;
         }
 
         #error-message {
             color: red;
             margin-top: 10px;
         }
+
+        .right-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #fff;
+            border-left: 2px solid #ccc;
+            margin-top: 60px; /* Moves track list further down */
+        }
+
+        .track-list {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .track {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .track-name {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .play-button {
+            font-size: 18px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="room-page">
-        <div class="video-container">
-            <div class="video" id="user-video">
-                <video id="local-video" autoplay muted playsinline style="width: 100%; height: 100%;"></video>
-            </div>
-            <div class="video others" id="others-video">
-                <p>Others' Video</p>
+    <!-- Logo -->
+    <div class="logo">soundWEave</div>
+
+    <div class="main-wrapper">
+        <!-- Left Container -->
+        <div class="left-container">
+            <div class="container" id="room-page">
+                <!-- Video Container -->
+                <div class="video-container">
+                    <video id="local-video" autoplay muted playsinline></video>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message"></div>
+
+                <!-- Button Container -->
+                <div class="button-container">
+                    <!-- Camera toggle button -->
+                    <button id="toggle-button" class="toggle-button">🎥</button> 
+                    <!-- Audio toggle button -->
+                    <button id="audio-toggle-button" class="toggle-button">🎙️</button>
+                </div>
             </div>
         </div>
-        <div id="error-message"></div>
+
+        <!-- Right Container -->
+        <div class="right-container">
+            <h2>Track List</h2>
+            <div class="track-list" id="track-list">
+                <div class="track">
+                    <span class="track-name">Track 1</span>
+                    <button class="play-button" onclick="playTrack('track1.mp3')">▶️ Play</button>
+                </div>
+                <div class="track">
+                    <span class="track-name">Track 2</span>
+                    <button class="play-button" onclick="playTrack('track2.mp3')">▶️ Play</button>
+                </div>
+                <div class="track">
+                    <span class="track-name">Track 3</span>
+                    <button class="play-button" onclick="playTrack('track3.mp3')">▶️ Play</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- WebRTC and Socket JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/phoenix@1.7.0/priv/static/phoenix.js"></script>
     <script>
-        const roomCode = "<%= @room_code %>";  // This will inject the room code dynamically from the controller
-        const socket = new Phoenix.Socket("/socket", { params: { token: window.userToken } });
-        socket.connect();
-
-        const channel = socket.channel(`room:${roomCode}`, {});
-        channel.join()
-            .receive("ok", resp => console.log("Joined room successfully", resp))
-            .receive("error", resp => console.log("Unable to join room", resp));
+        let mediaStream = null;
+        let isCameraOn = true;
+        let isAudioOn = true;
 
         const userVideoElement = document.getElementById("local-video");
         const errorMessageElement = document.getElementById("error-message");
+        const toggleButton = document.getElementById("toggle-button");
+        const audioToggleButton = document.getElementById("audio-toggle-button");
 
-        // Function to handle permissions and media
+        const audio = new Audio();
+
+        // Request media permissions and initialize stream
         function requestMediaPermissions() {
             navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                 .then(stream => {
-                    // Attach the stream to the video element
+                    mediaStream = stream;
                     userVideoElement.srcObject = stream;
-
-                    // Further WebRTC handling can go here (e.g., sending tracks to peers)
-                    console.log("Media stream obtained.");
                 })
                 .catch(err => {
                     console.error("Error accessing user media:", err);
-                    errorMessageElement.innerHTML = "Unable to access your camera and microphone. Please check your permissions.";
-                    alert("Unable to access your camera and microphone. Please check your permissions.");
+                    errorMessageElement.textContent = "Unable to access your camera and microphone. Please check your permissions.";
                 });
         }
 
-        // Request media permissions when the page loads
+        // Toggle Camera
+        toggleButton.addEventListener("click", () => {
+            if (mediaStream) {
+                const videoTrack = mediaStream.getVideoTracks()[0];
+                videoTrack.enabled = !videoTrack.enabled;
+                isCameraOn = videoTrack.enabled;
+                toggleButton.innerHTML = isCameraOn ? "🎥" : "❌";
+                toggleButton.classList.toggle("off", !isCameraOn);
+            }
+        });
+
+        // Toggle Audio
+        audioToggleButton.addEventListener("click", () => {
+            if (mediaStream) {
+                const audioTrack = mediaStream.getAudioTracks()[0];
+                audioTrack.enabled = !audioTrack.enabled;
+                isAudioOn = audioTrack.enabled;
+                audioToggleButton.innerHTML = isAudioOn ? "🎙️" : "🔇";
+                audioToggleButton.classList.toggle("off", !isAudioOn);
+            }
+        });
+
+        // Play selected track
+        function playTrack(src) {
+            audio.src = src;
+            audio.play();
+        }
+
+        // Initialize media permissions on load
         requestMediaPermissions();
     </script>
-    
 </body>
 </html>
