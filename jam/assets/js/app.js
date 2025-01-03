@@ -17,8 +17,6 @@
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import Sortable from "../vendor/sortable"
-import phxFeedbackDom from "./phx_feedback_dom"
 
 let nowSeconds = () => Math.round(Date.now() / 1000)
 let rand = (min, max) => Math.floor(Math.random() * (max - min) + min)
