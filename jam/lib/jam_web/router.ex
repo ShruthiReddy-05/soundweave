@@ -24,7 +24,7 @@ defmodule JamWeb.Router do
     get "/room/:code", PageController, :join_room
   end
 
-    get "/the_song", Audio, :song
+    /get "/the_song", Audio, :song
 
   scope "/api", JamWeb do
     pipe_through :api
