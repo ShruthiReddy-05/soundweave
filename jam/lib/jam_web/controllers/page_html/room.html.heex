@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
         }
 
         .left-container {
-            width: 50%; /* Take up half the width */
+            width: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -59,7 +59,7 @@
             background-color: #000;
             border-radius: 8px;
             width: 100%;
-            height: 300px; /* Adjusted for a balanced layout */
+            height: 300px;
             overflow: hidden;
             margin-bottom: 20px;
         }
@@ -104,7 +104,20 @@
             padding: 20px;
             background-color: #fff;
             border-left: 2px solid #ccc;
-            margin-top: 60px; /* Moves track list further down */
+            margin-top: 60px;
+        }
+
+        .upload-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .upload-container input {
+            margin-bottom: 10px;
         }
 
         .track-list {
@@ -143,6 +156,12 @@
     <!-- Logo -->
     <div class="logo">soundWEave</div>
 
+    <!-- Upload Container -->
+    <div class="upload-container">
+        <input type="file" id="audio-upload" accept="audio/mp3" multiple>
+        <button onclick="uploadTracks()">Upload Tracks</button>
+    </div>
+
     <div class="main-wrapper">
         <!-- Left Container -->
         <div class="left-container">
@@ -160,7 +179,7 @@
                     <!-- Camera toggle button -->
                     <button id="toggle-button" class="toggle-button">🎥</button> 
                     <!-- Audio toggle button -->
-                    <button id="audio-toggle-button" class="toggle-button">🎙️</button>
+                    <button id="audio-toggle-button" class="toggle-button">🎙</button>
                 </div>
             </div>
         </div>
@@ -169,18 +188,7 @@
         <div class="right-container">
             <h2>Track List</h2>
             <div class="track-list" id="track-list">
-                <div class="track">
-                    <span class="track-name">Track 1</span>
-                    <button class="play-button" onclick="playTrack('track1.mp3')">▶️ Play</button>
-                </div>
-                <div class="track">
-                    <span class="track-name">Track 2</span>
-                    <button class="play-button" onclick="playTrack('track2.mp3')">▶️ Play</button>
-                </div>
-                <div class="track">
-                    <span class="track-name">Track 3</span>
-                    <button class="play-button" onclick="playTrack('track3.mp3')">▶️ Play</button>
-                </div>
+                <!-- Tracks will be dynamically added here -->
             </div>
         </div>
     </div>
@@ -194,7 +202,7 @@
         const errorMessageElement = document.getElementById("error-message");
         const toggleButton = document.getElementById("toggle-button");
         const audioToggleButton = document.getElementById("audio-toggle-button");
-
+        const trackListElement = document.getElementById("track-list");
         const audio = new Audio();
 
         // Request media permissions and initialize stream
@@ -227,18 +235,54 @@
                 const audioTrack = mediaStream.getAudioTracks()[0];
                 audioTrack.enabled = !audioTrack.enabled;
                 isAudioOn = audioTrack.enabled;
-                audioToggleButton.innerHTML = isAudioOn ? "🎙️" : "🔇";
+                audioToggleButton.innerHTML = isAudioOn ? "🎙" : "🔇";
                 audioToggleButton.classList.toggle("off", !isAudioOn);
             }
         });
 
-        // Play selected track
-        function playTrack(src) {
-            audio.src = src;
-            audio.play();
-        }
+        // Upload and Display Tracks
+        // Upload and Display Tracks
+// Upload and Display Tracks
+function uploadTracks() {
+    const audioUpload = document.getElementById("audio-upload");
+    const files = audioUpload.files;
 
-        // Initialize media permissions on load
+    for (const file of files) {
+        const trackElement = document.createElement("div");
+        trackElement.classList.add("track");
+
+        const trackName = document.createElement("span");
+        trackName.classList.add("track-name");
+        trackName.textContent = file.name;
+
+        const playPauseButton = document.createElement("button");
+        playPauseButton.classList.add("play-button");
+        playPauseButton.textContent = "▶ Play";
+
+        // Create a new Audio instance for each uploaded track
+        const trackAudio = new Audio(URL.createObjectURL(file));
+        trackAudio.pause();  // Start paused
+
+        // Toggle play/pause functionality
+        playPauseButton.addEventListener("click", () => {
+            if (trackAudio.paused) {
+                trackAudio.play();
+                playPauseButton.textContent = "⏸ Pause"; // Change button text to "Pause"
+            } else {
+                trackAudio.pause();
+                playPauseButton.textContent = "▶ Play"; // Change button text to "Play"
+            }
+        });
+
+        trackElement.appendChild(trackName);
+        trackElement.appendChild(playPauseButton);
+        trackListElement.appendChild(trackElement);
+    }
+}
+
+
+
+        // Initialize the app
         requestMediaPermissions();
     </script>
 </body>
