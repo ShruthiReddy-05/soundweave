@@ -1,4 +1,12 @@
-# Jam
+# SoundWEave - Jam
+
+Real-time platform to collaborate on audio tracks where users can join virtual jam rooms, sync audio and layer tracks.
+
+`sudo apt install pulseaudio, portaudio19-dev, pkg-config` 
+
+Run `mix deps.get` to get dependencies 
+
+TO run via CLI : `mix run --no-halt run.exs`
 
 To start your Phoenix server:
 
