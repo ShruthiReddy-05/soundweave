@@ -64,6 +64,7 @@ defmodule Jam.MixProject do
       {:membrane_ffmpeg_swresample_plugin, "~> 0.20.2"},
       {:membrane_mp3_mad_plugin, "~> 0.18.3"},
       {:membrane_mp3_lame_plugin, "~> 0.18.2"},
+      {:membrane_audio_mix_plugin, "~> 0.16.2"},
       {:dialyxir, "~> 1.2", only: [:dev], runtime: false}
     ]
   end
