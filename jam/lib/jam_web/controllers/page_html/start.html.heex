@@ -3,142 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Jamming App - Start</title>
+    <title>soundWEave - Start Jamming</title>
     <style>
+        :root {
+            --teal-50: #f0fdfa;
+            --teal-100: #ccfbf1;
+            --teal-200: #99f6e4;
+            --teal-300: #5eead4;
+            --teal-400: #2dd4bf;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --teal-700: #0f766e;
+            --teal-800: #115e59;
+            --teal-900: #134e4a;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--teal-50);
+            color: var(--teal-900);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 2rem;
+            margin-top: 6rem;
+            width: 100%;
+            max-width: 1200px;
+            justify-content: center;
         }
 
         .container {
-            width: 90%;
-            max-width: 600px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .container h1 {
-            margin: 0 0 10px;
-            font-size: 24px;
-            color: #444;
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--teal-400), var(--teal-500));
         }
 
-        .container p {
-            margin: 0 0 20px;
-            color: #666;
-            font-size: 16px;
+        h1 {
+            color: var(--teal-800);
+            font-size: 1.8rem;
+            margin: 0 0 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--teal-700);
+            font-size: 1.1rem;
+            margin: 0 0 1.5rem;
+            line-height: 1.5;
         }
 
         .button {
             display: inline-flex;
             align-items: center;
-            padding: 10px 20px;
-            background-color: #e9e9e9;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            margin: 5px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 100%;
+            max-width: 300px;
         }
 
         .button:hover {
-            background-color: #d6d6d6;
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+            transform: translateY(-1px);
         }
 
         .button img {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
+            width: 24px;
+            height: 24px;
+            margin-right: 0.75rem;
         }
 
         .input-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-top: 10px;
+            gap: 1rem;
+            width: 100%;
         }
 
         .input-container input {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--teal-200);
+            border-radius: 0.5rem;
             width: 100%;
             max-width: 300px;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-container input:focus {
+            outline: none;
+            border-color: var(--teal-500);
+        }
+
+        #room-code-display {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--teal-50);
+            border-radius: 0.5rem;
+            color: var(--teal-700);
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="start-page">
-        <h1>Start a Room</h1>
-        <p>Click on the button below to start a room.</p>
-        <button class="button" onclick="startRoom()">
-            <img src="/images/start-guitar.jpg" alt="Start Room">
-            Start Room
-        </button>
-        <!-- New element to display the room code -->
-        <p id="room-code-display" style="margin-top: 10px; font-weight: bold; color: #007BFF;"></p>
-    </div>
+    <div class="header">soundWEave</div>
 
-
-    <div class="container" id="join-page">
-        <h1>Join a Room</h1>
-        <p>Enter a room code to join an existing room.</p>
-        <div class="input-container">
-            <input type="text" id="room-code" placeholder="Enter Room Code">
-            <button class="button" onclick="joinRoom()">
-                <img src="/images/start-guitar.jpg" alt="Join Room">
-                Join Room
+    <div class="main-content">
+        <div class="container" id="start-page">
+            <h1>Start a Room</h1>
+            <p>Create a new jamming session and invite others to join.</p>
+            <button class="button" onclick="startRoom()">
+                <img src="/images/start-guitar.jpg" alt="Start Room">
+                Create Room
             </button>
+            <div id="room-code-display"></div>
+        </div>
+
+        <div class="container" id="join-page">
+            <h1>Join a Room</h1>
+            <p>Enter a room code to join an existing jamming session.</p>
+            <div class="input-container">
+                <input type="text" id="room-code" placeholder="Enter Room Code">
+                <button class="button" onclick="joinRoom()">
+                    <img src="/images/start-guitar.jpg" alt="Join Room">
+                    Join Room
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        
-
-
-
-
         function joinRoom() {
             const roomCode = document.getElementById('room-code').value;
             if (roomCode) {
-                // Redirect to the room page with the entered code
                 window.location.href = `/room/${roomCode}`;
             } else {
                 alert('Please enter a room code.');
             }
         }
 
-
-
         function startRoom() {
-            fetch('/create_room')
-            .then(response => response.json())
-            .then(data => {
-                const roomCode = data.room_code;
-                const roomCodeDisplay = document.getElementById('room-code-display');
-                roomCodeDisplay.textContent = `Room created! Share this code: ${roomCode}`;
-            })
-            .catch(error => console.error('Error creating room:', error));
-        }
+    fetch('/create_room')
+        .then(response => response.json())
+        .then(data => {
+            const roomCode = data.room_code;
+            const roomCodeDisplay = document.getElementById('room-code-display');
+            roomCodeDisplay.textContent = `Room Code: ${roomCode}`;
+            roomCodeDisplay.style.display = 'block';
 
-
-
-
+            // Give the user 5 seconds to copy the code before redirecting
+            setTimeout(() => {
+                window.location.href = `/room/${roomCode}`;
+            }, 5000); // 5 seconds delay
+        })
+        .catch(error => console.error('Error creating room:', error));
+}
 
 
     </script>
