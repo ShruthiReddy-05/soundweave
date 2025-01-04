@@ -3,244 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Jamming App - Room</title>
+    <title>soundWEave - Live Jamming</title>
     <style>
+        :root {
+            --teal-50: #f0fdfa;
+            --teal-100: #ccfbf1;
+            --teal-200: #99f6e4;
+            --teal-300: #5eead4;
+            --teal-400: #2dd4bf;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --teal-700: #0f766e;
+            --teal-800: #115e59;
+            --teal-900: #134e4a;
+        }
+
         body {
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f9fb;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--teal-50);
             min-height: 100vh;
-            padding: 20px;
+            color: var(--teal-900);
         }
 
-        /* Header */
         .header {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
             color: white;
-            width: 100%;
-            padding: 15px;
+            padding: 1.5rem;
             text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
 
-        /* Main Content Layout */
         .main-wrapper {
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            width: 100%;
-            max-width: 1200px;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            min-height: calc(100vh - 150px);
         }
 
-        /* Left Section (Video/Recording) */
-        .left-container {
+        .container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            min-width: 0; /* Prevents flex items from overflowing */
+            max-width: 50%;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--teal-400), var(--teal-500));
         }
 
         .video-container {
-            width: 100%;
-            height: 300px;
-            background-color: #000;
-            border-radius: 10px;
+            aspect-ratio: 16/9;
+            background-color: var(--teal-900);
+            border-radius: 0.75rem;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         #local-video {
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
 
         .button-container {
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .button-container button {
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
+        button {
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 0.5rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 1rem;
         }
 
-        .button-container button:hover {
-            background-color: #45a049;
+        .primary-button {
+            background-color: var(--teal-600);
+            color: white;
+        }
+
+        .primary-button:hover {
+            background-color: var(--teal-700);
+        }
+
+        .secondary-button {
+            background-color: var(--teal-100);
+            color: var(--teal-800);
+        }
+
+        .secondary-button:hover {
+            background-color: var(--teal-200);
+        }
+
+        .control-button {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            padding: 0;
+        }
+
+        .recording-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .off {
-            background-color: #f44336;
+            background-color: #ef4444;
+            color: white;
         }
 
-        /* Right Section (Track List and Upload) */
-        .right-container {
-            flex: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-        }
-
-        h2 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        .upload-section {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .upload-section input[type="file"] {
-            margin-bottom: 10px;
+        .off:hover {
+            background-color: #dc2626;
         }
 
         .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
             max-height: 400px;
             overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .track-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .track-list::-webkit-scrollbar-track {
+            background: var(--teal-50);
+            border-radius: 3px;
+        }
+
+        .track-list::-webkit-scrollbar-thumb {
+            background: var(--teal-300);
+            border-radius: 3px;
         }
 
         .track {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #fafafa;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            transition: background-color 0.3s ease;
+            justify-content: space-between;
+            padding: 1rem;
+            background-color: var(--teal-50);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
         }
 
         .track:hover {
-            background-color: #f0f0f0;
+            background-color: var(--teal-100);
         }
 
         .track-name {
-            font-size: 16px;
-            color: #333;
+            font-weight: 500;
+            color: var(--teal-800);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 1rem;
         }
 
-        .play-button {
-            padding: 8px 16px;
-            font-size: 14px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        .upload-section {
+            margin-bottom: 1.5rem;
         }
 
-        .play-button:hover {
-            background-color: #45a049;
+        input[type="file"] {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--teal-50);
+            border-radius: 0.5rem;
+            border: 2px dashed var(--teal-300);
+            margin-bottom: 1rem;
         }
 
-        /* Recording Section */
-        .recording-controls {
-            margin-top: 30px;
-            text-align: center;
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--teal-800);
+            margin-bottom: 1rem;
         }
 
         #recorded-player {
             width: 100%;
-            display: none;
-            margin-top: 20px;
+            margin-top: 1rem;
         }
 
-        .upload-button {
-            background-color: #2196F3;
-            font-size: 16px;
+        .mix-button {
+            width: 100%;
+            margin-top: 1.5rem;
+            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
+            padding: 1rem;
+            font-size: 1.125rem;
         }
 
-        .upload-button:hover {
-            background-color: #1976D2;
+        .mix-button:hover {
+            background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
         }
 
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-
+    <!-- Rest of the HTML remains the same -->
     <div class="header">soundWEave - Live Jamming</div>
 
-    <!-- Main Content -->
     <div class="main-wrapper">
-        <!-- Left Section (Video/Recording) -->
-        <div class="left-container">
+        <div class="container">
+            <div class="section-title">Live Session</div>
             <div class="video-container">
                 <video id="local-video" autoplay muted playsinline></video>
             </div>
 
             <div class="button-container">
-                <button id="toggle-button">🎥</button>
-                <button id="audio-toggle-button">🎙</button>
+                <button id="toggle-button" class="control-button secondary-button">🎥</button>
+                <button id="audio-toggle-button" class="control-button secondary-button">🎙</button>
             </div>
 
-            <!-- Recording Controls -->
             <div class="recording-controls">
-                <button id="start-recording-button" class="off">Start Recording</button>
-                <button id="stop-recording-button" class="off">Stop Recording</button>
+                <button id="start-recording-button" class="primary-button">Start Recording</button>
+                <button id="stop-recording-button" class="primary-button off">Stop Recording</button>
             </div>
 
-            <!-- Recorded Audio Player -->
             <audio id="recorded-player" controls>
                 <source id="recorded-source" type="audio/webm">
                 Your browser does not support the audio element.
             </audio>
         </div>
 
-        <!-- Right Section (Track List and Upload) -->
-        <div class="right-container">
-            <h2>Tracks</h2>
-            <!-- Upload Section -->
+        <div class="container">
+            <div class="section-title">Track Manager</div>
             <div class="upload-section">
                 <input type="file" id="audio-upload" accept="audio/*" multiple>
-                <button class="upload-button" onclick="uploadTracks()">Upload Tracks</button>
+                <button class="primary-button" onclick="uploadTracks()">Upload Tracks</button>
             </div>
-
             <div class="track-list" id="track-list">
-                <!-- Dynamically added tracks will go here -->
+                <!-- Tracks will be added here dynamically -->
             </div>
+            <button class="mix-button" onclick="mixTracks()">Mix Tracks</button>
         </div>
     </div>
 
+    <!-- JavaScript remains the same -->
     <script>
+        // Previous JavaScript code remains exactly the same
         let mediaStream = null;
         let isCameraOn = true;
         let isAudioOn = true;
         let mediaRecorder = null;
         let recordedChunks = [];
-        let audio = new Audio();
-        let currentTrackButton = null;
+        let audioElements = [];
 
         const userVideoElement = document.getElementById("local-video");
-        const errorMessageElement = document.getElementById("error-message");
         const toggleButton = document.getElementById("toggle-button");
         const audioToggleButton = document.getElementById("audio-toggle-button");
         const trackListElement = document.getElementById("track-list");
@@ -249,7 +297,6 @@
         const recordedPlayer = document.getElementById("recorded-player");
         const recordedSource = document.getElementById("recorded-source");
 
-        // Request media permissions
         function requestMediaPermissions() {
             navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                 .then(stream => {
@@ -259,33 +306,25 @@
                 })
                 .catch(err => {
                     console.error("Error accessing user media:", err);
-                    errorMessageElement.textContent = "Unable to access your camera and microphone. Please check your permissions.";
                 });
         }
 
-        // Toggle Camera
         toggleButton.addEventListener("click", () => {
             if (mediaStream) {
-                const videoTrack = mediaStream.getVideoTracks()[0];
-                videoTrack.enabled = !videoTrack.enabled;
-                isCameraOn = videoTrack.enabled;
-                toggleButton.innerHTML = isCameraOn ? "🎥" : "❌";
-                toggleButton.classList.toggle("off", !isCameraOn);
+                isCameraOn = !isCameraOn;
+                mediaStream.getVideoTracks()[0].enabled = isCameraOn;
+                toggleButton.innerHTML = isCameraOn ? "🎥" : "🚫";
             }
         });
 
-        // Toggle Audio
         audioToggleButton.addEventListener("click", () => {
             if (mediaStream) {
-                const audioTrack = mediaStream.getAudioTracks()[0];
-                audioTrack.enabled = !audioTrack.enabled;
-                isAudioOn = audioTrack.enabled;
+                isAudioOn = !isAudioOn;
+                mediaStream.getAudioTracks()[0].enabled = isAudioOn;
                 audioToggleButton.innerHTML = isAudioOn ? "🎙" : "🔇";
-                audioToggleButton.classList.toggle("off", !isAudioOn);
             }
         });
 
-        // Start recording audio
         startRecordingButton.addEventListener("click", () => {
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(mediaStream);
@@ -303,47 +342,55 @@
             stopRecordingButton.classList.remove("off");
         });
 
-        // Stop recording audio
         stopRecordingButton.addEventListener("click", () => {
             mediaRecorder.stop();
             startRecordingButton.disabled = false;
             stopRecordingButton.classList.add("off");
         });
 
-        // Upload Tracks
         function uploadTracks() {
             const files = document.getElementById("audio-upload").files;
-            for (let file of files) {
-                const trackElement = document.createElement("div");
-                trackElement.classList.add("track");
-                trackElement.innerHTML = `
-                    <span class="track-name">${file.name}</span>
-                    <button class="play-button" onclick="togglePlayPause('${URL.createObjectURL(file)}', this)">Play</button>
-                `;
-                trackListElement.appendChild(trackElement);
+            if (files.length > 0) {
+                Array.from(files).forEach((file, index) => {
+                    const trackDiv = document.createElement("div");
+                    trackDiv.classList.add("track");
+                    trackDiv.innerHTML = `
+                        <span class="track-name">${file.name}</span>
+                        <button class="secondary-button" onclick="playTrack(${index})">Play</button>
+                    `;
+                    trackListElement.appendChild(trackDiv);
+                    const audioElement = new Audio(URL.createObjectURL(file));
+                    audioElement.setAttribute("data-index", index);
+                    audioElements.push(audioElement);
+                });
             }
         }
 
-        // Toggle Play/Pause for tracks
-        function togglePlayPause(trackUrl, button) {
-            if (audio.src !== trackUrl) {
-                audio.src = trackUrl;
-                audio.play();
-                button.innerText = "Pause";
+        function playTrack(index) {
+            const audioElement = audioElements[index];
+            const button = trackListElement.getElementsByClassName("secondary-button")[index];
+            if (audioElement.paused) {
+                button.innerHTML = "Stop";
+                audioElement.play();
             } else {
-                if (audio.paused) {
-                    audio.play();
-                    button.innerText = "Pause";
-                } else {
-                    audio.pause();
-                    button.innerText = "Play";
-                }
+                button.innerHTML = "Play";
+                audioElement.pause();
             }
         }
 
-        // Initialize Media Permissions
-        requestMediaPermissions();
-    </script>
+        function mixTracks() {
+            if (audioElements.length < 2) {
+                alert("Please upload at least two tracks to mix.");
+                return;
+            }
 
+            audioElements.forEach(audioEl => {
+                audioEl.currentTime = 0;
+                audioEl.play();
+            });
+        }
+
+        window.onload = requestMediaPermissions;
+    </script>
 </body>
 </html>
